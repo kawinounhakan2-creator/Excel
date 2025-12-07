@@ -1,0 +1,51 @@
+from openpyxl import load_workbook, Workbook
+from datetime import datetime
+import os
+
+# จำลอง payload สำหรับทดสอบ (ลบออกถ้าได้มาจากระบบจริง)
+
+# ตั้งค่า path ไปยังโฟลเดอร์และไฟล์
+dirpath = r"D:\งาน\โปรเจค\Excel"
+filepath = os.path.join(dirpath, "Rahadpaisanee.xlsx")
+
+# ดึงข้อมูลจาก payload
+p = payload['DeepDetect']['objects'][0]['name']
+
+# สร้างโฟลเดอร์ถ้ายังไม่มี
+os.makedirs(dirpath, exist_ok=True)
+
+try:
+ # เปิดไฟล์ Excel ถ้ามีอยู่ หรือสร้างใหม่ถ้าไม่มี
+ if os.path.exists(filepath):
+  wb = load_workbook(filepath)
+  ws = wb.active
+ else:
+  wb = Workbook()
+  ws = wb.active
+  ws.title = "Sheet1"
+  # สร้าง header ถ้ายังไม่มี
+  ws['A1'] = 'Date'
+  ws['B1'] = 'Time'
+  ws['C1'] = 'Detection'
+
+ # ค้นหาแถวถัดไป
+ i = ws.max_row + 1
+
+ # เพิ่มข้อมูลลงแถวใหม่
+ ws[f'A{i}'] = datetime.now().strftime("%Y-%m-%d")
+ ws[f'B{i}'] = datetime.now().strftime("%H:%M:%S")
+ if p == '10230':
+  ws[f'C{i}'] = '10230'
+ elif p == '10240':
+  ws[f'C{i}'] = '10240'
+ elif p == '10250':
+  ws[f'C{i}'] = '10250'
+ else:
+  ws[f'C{i}'] = 'unknown'
+
+ # บันทึกลง Excel
+ wb.save(filepath)
+ print(f"✔ บันทึกข้อมูลสำเร็จในไฟล์: {filepath}")
+
+except Exception as e:
+ print(f"❌ เกิดข้อผิดพลาด: {e}")
