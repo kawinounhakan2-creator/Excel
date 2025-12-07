@@ -2,8 +2,6 @@ from openpyxl import load_workbook, Workbook
 from datetime import datetime
 import os
 
-# จำลอง payload สำหรับทดสอบ (ลบออกถ้าได้มาจากระบบจริง)
-
 # ตั้งค่า path ไปยังโฟลเดอร์และไฟล์
 dirpath = r"D:\งาน\โปรเจค\Excel"
 filepath = os.path.join(dirpath, "Rahadpaisanee.xlsx")
